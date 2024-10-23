@@ -1,4 +1,6 @@
-import { Application, Graphics } from 'pixi.js'
+import { Application } from 'pixi.js'
+import { createBall } from './createBall'
+import { createPad } from './createPad'
 
 console.log('Pong with PixiJS')
 
@@ -11,33 +13,47 @@ await app.init({
 })
 document.body.appendChild(app.canvas)
 
+let ball
+let playerPad
+let botPad
+const mouse = { x: 0, y: 0 }
+let gameStarted = false
+
 function createGameParts() {
-    const ball = createBall(5, 0xffffff)
+    ball = createBall(5, 0xffffff)
     ball.x = app.screen.width / 2
     ball.y = app.screen.height / 2
     app.stage.addChild(ball)
 
-    const playerPad = createPad(10, 50, 0xffffff)
+    playerPad = createPad(10, 50, 0xffffff)
     playerPad.x = 50
     playerPad.y = app.screen.height / 2
     app.stage.addChild(playerPad)
 
-    const botPad = createPad(10, 50, 0xffffff)
+    botPad = createPad(10, 50, 0xffffff)
     botPad.x = app.screen.width - 50
     botPad.y = app.screen.height / 2
     app.stage.addChild(botPad)
 }
-
-function createBall(radius, color) {
-    const ball = new Graphics().circle(0, 0, radius).fill(color)
-    return ball
-}
-
-function createPad(width, height, color) {
-    const pad = new Graphics()
-        .rect(-width / 2, -height / 2, width, height)
-        .fill(color)
-    return pad
-}
-
 createGameParts()
+
+function bindEvents() {
+    app.stage.eventMode = 'static'
+    app.stage.hitArea = app.screen
+    app.stage.on('pointermove', handleMove)
+}
+
+function handleMove(e) {
+    mouse.x = e.global.x
+    mouse.y = e.global.y
+}
+bindEvents()
+
+app.ticker.add(() => {
+    playerPad.y = mouse.y
+
+    if (!gameStarted) {
+        ball.y = playerPad.y
+        ball.x = playerPad.x + 20
+    }
+})
