@@ -76,7 +76,7 @@ app.ticker.add(() => {
             gameStarted = false
         }
 
-        // Collision ball and pads
+        // Collision ball and botPad
         if (ball.x + ball.width / 2 > botPad.x - ball.width) {
             if (
                 ball.y > botPad.y - botPad.height / 2 &&
@@ -85,6 +85,7 @@ app.ticker.add(() => {
                 ball.velocity.x = -ball.velocity.x
             }
         }
+        // Collision ball and playerPad
         if (ball.x - ball.width / 2 < playerPad.x + playerPad.width) {
             if (
                 ball.y > playerPad.y - playerPad.height / 2 &&
