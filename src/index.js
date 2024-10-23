@@ -18,6 +18,7 @@ let playerPad
 let botPad
 const mouse = { x: 0, y: 0 }
 let gameStarted = false
+let isPlayerTurn = false
 
 function createGameParts() {
     ball = createBall(5, 0xffffff)
@@ -52,7 +53,9 @@ function handleMove(e) {
     mouse.y = e.global.y
 }
 function handleClick() {
-    gameStarted = true
+    if (isPlayerTurn) {
+        gameStarted = true
+    }
 }
 bindEvents()
 
@@ -61,10 +64,16 @@ app.ticker.add(() => {
     botPad.y += (ball.y - botPad.y) * 0.095
 
     if (!gameStarted) {
-        ball.x = playerPad.x + playerPad.width + 5
-        ball.y = playerPad.y
-        ball.velocity.x = Math.abs(ball.velocity.x)
-        ball.velocity.y = 0
+        if (isPlayerTurn) {
+            ball.x = playerPad.x + playerPad.width + 5
+            ball.y = playerPad.y
+            ball.velocity.x = Math.abs(ball.velocity.x)
+            ball.velocity.y = 0
+        } else {
+            ball.x = botPad.x - botPad.width - 5
+            ball.y = botPad.y
+            ball.velocity.x = -ball.velocity.x
+        }
     } else {
         ball.x += ball.velocity.x
         ball.y += ball.velocity.y
@@ -73,8 +82,10 @@ app.ticker.add(() => {
         if (ball.x > app.screen.width) {
             console.log('Player wins')
             gameStarted = false
+            isPlayerTurn = false
         } else if (ball.x < 0) {
             console.log('Bot wins')
+            isPlayerTurn = true
             gameStarted = false
         }
         // Collision ball walls top and bottom
