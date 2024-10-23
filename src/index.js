@@ -54,6 +54,6 @@ app.ticker.add(() => {
 
     if (!gameStarted) {
         ball.y = playerPad.y
-        ball.x = playerPad.x + 20
+        ball.x = playerPad.x + playerPad.width + 5
     }
 })
