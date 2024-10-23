@@ -60,14 +60,15 @@ app.ticker.add(() => {
     playerPad.y = mouse.y
 
     if (!gameStarted) {
-        ball.y = playerPad.y
         ball.x = playerPad.x + playerPad.width
+        ball.y = playerPad.y
         ball.velocity.x = Math.abs(ball.velocity.x)
+        ball.velocity.y = 0
     } else {
         ball.x += ball.velocity.x
         ball.y += ball.velocity.y
 
-        // Collision ball and walls
+        // Collision ball walls left and right
         if (ball.x > app.screen.width) {
             console.log('Player wins')
             gameStarted = false
@@ -75,23 +76,40 @@ app.ticker.add(() => {
             console.log('Bot wins')
             gameStarted = false
         }
+        // Collision ball walls top and bottom
+        if (
+            ball.y < ball.height / 2 ||
+            ball.y > app.screen.height - ball.height / 2
+        ) {
+            ball.velocity.y = -ball.velocity.y
+        }
 
         // Collision ball and botPad
-        if (ball.x + ball.width / 2 > botPad.x - ball.width) {
+        if (
+            ball.x + ball.width / 2 > botPad.x - ball.width &&
+            ball.x + ball.width / 2 < botPad.x + botPad.width / 2
+        ) {
             if (
                 ball.y > botPad.y - botPad.height / 2 &&
                 ball.y < botPad.y + botPad.height / 2
             ) {
                 ball.velocity.x = -ball.velocity.x
+                ball.velocity.y =
+                    ((ball.y - botPad.y) / (botPad.height / 2)) * 10
             }
         }
         // Collision ball and playerPad
-        if (ball.x - ball.width / 2 < playerPad.x + playerPad.width) {
+        if (
+            ball.x - ball.width / 2 < playerPad.x + playerPad.width &&
+            ball.x - ball.width / 2 > playerPad.x - playerPad.width / 2
+        ) {
             if (
                 ball.y > playerPad.y - playerPad.height / 2 &&
                 ball.y < playerPad.y + playerPad.height / 2
             ) {
-                ball.velocity.x = Math.abs(ball.velocity.x)
+                ball.velocity.x = -ball.velocity.x
+                ball.velocity.y =
+                    ((ball.y - playerPad.y) / (playerPad.height / 2)) * 10
             }
         }
     }
