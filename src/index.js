@@ -58,9 +58,10 @@ bindEvents()
 
 app.ticker.add(() => {
     playerPad.y = mouse.y
+    botPad.y += (ball.y - botPad.y) * 0.095
 
     if (!gameStarted) {
-        ball.x = playerPad.x + playerPad.width
+        ball.x = playerPad.x + playerPad.width + 5
         ball.y = playerPad.y
         ball.velocity.x = Math.abs(ball.velocity.x)
         ball.velocity.y = 0
