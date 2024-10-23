@@ -5,6 +5,8 @@ console.log('Pong with PixiJS')
 const app = new Application()
 await app.init({
     resizeTo: window,
+    // width: window.innerWidth,
+    // height: window.innerHeight,
     antialias: true,
 })
 document.body.appendChild(app.canvas)
