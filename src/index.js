@@ -40,12 +40,15 @@ createGameParts()
 function bindEvents() {
     app.stage.eventMode = 'static'
     app.stage.hitArea = app.screen
-    app.stage.on('pointermove', handleMove)
+    app.stage.on('pointermove', handleMove).on('pointerdown', handleClick)
 }
 
 function handleMove(e) {
     mouse.x = e.global.x
     mouse.y = e.global.y
+}
+function handleClick() {
+    gameStarted = true
 }
 bindEvents()
 
