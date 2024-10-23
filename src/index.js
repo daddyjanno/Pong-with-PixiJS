@@ -23,6 +23,10 @@ function createGameParts() {
     ball = createBall(5, 0xffffff)
     ball.x = app.screen.width / 2
     ball.y = app.screen.height / 2
+    ball.velocity = {
+        x: 10,
+        y: 0,
+    }
     app.stage.addChild(ball)
 
     playerPad = createPad(10, 50, 0xffffff)
@@ -57,6 +61,37 @@ app.ticker.add(() => {
 
     if (!gameStarted) {
         ball.y = playerPad.y
-        ball.x = playerPad.x + playerPad.width + 5
+        ball.x = playerPad.x + playerPad.width
+        ball.velocity.x = Math.abs(ball.velocity.x)
+    } else {
+        ball.x += ball.velocity.x
+        ball.y += ball.velocity.y
+
+        // Collision ball and walls
+        if (ball.x > app.screen.width) {
+            console.log('Player wins')
+            gameStarted = false
+        } else if (ball.x < 0) {
+            console.log('Bot wins')
+            gameStarted = false
+        }
+
+        // Collision ball and pads
+        if (ball.x + ball.width / 2 > botPad.x - ball.width) {
+            if (
+                ball.y > botPad.y - botPad.height / 2 &&
+                ball.y < botPad.y + botPad.height / 2
+            ) {
+                ball.velocity.x = -ball.velocity.x
+            }
+        }
+        if (ball.x - ball.width / 2 < playerPad.x + playerPad.width) {
+            if (
+                ball.y > playerPad.y - playerPad.height / 2 &&
+                ball.y < playerPad.y + playerPad.height / 2
+            ) {
+                ball.velocity.x = Math.abs(ball.velocity.x)
+            }
+        }
     }
 })
