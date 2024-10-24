@@ -1,6 +1,8 @@
 import { Application } from 'pixi.js'
 import { createBall } from './createBall'
 import { createPad } from './createPad'
+import { TweenMax } from 'gsap/gsap-core'
+import gsap, { Expo } from 'gsap'
 
 console.log('Pong with PixiJS')
 
@@ -45,6 +47,7 @@ function bindEvents() {
     app.stage.hitArea = app.screen
     app.stage.on('pointermove', handleMove).on('pointerdown', handleClick)
 }
+bindEvents()
 
 function handleMove(e) {
     mouse.x = e.global.x
@@ -55,7 +58,16 @@ function handleClick() {
         gameStarted = true
     }
 }
-bindEvents()
+function botLauchBall() {
+    gsap.to(botPad, {
+        duration: 1.5,
+        y: Math.random() * app.screen.height,
+        ease: 'expo.out',
+        onComplete: () => {
+            gameStarted = true
+        },
+    })
+}
 
 app.ticker.add(() => {
     playerPad.y = mouse.y
@@ -81,6 +93,7 @@ app.ticker.add(() => {
             console.log('Player wins')
             gameStarted = false
             isPlayerTurn = false
+            botLauchBall()
         } else if (ball.x < 0) {
             console.log('Bot wins')
             isPlayerTurn = true
