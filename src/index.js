@@ -7,8 +7,6 @@ console.log('Pong with PixiJS')
 const app = new Application()
 await app.init({
     resizeTo: window,
-    // width: window.innerWidth,
-    // height: window.innerHeight,
     antialias: true,
 })
 document.body.appendChild(app.canvas)
@@ -18,7 +16,7 @@ let playerPad
 let botPad
 const mouse = { x: 0, y: 0 }
 let gameStarted = false
-let isPlayerTurn = false
+let isPlayerTurn = true
 
 function createGameParts() {
     ball = createBall(5, 0xffffff)
