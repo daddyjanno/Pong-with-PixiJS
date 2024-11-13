@@ -1,8 +1,7 @@
 import { Application } from 'pixi.js'
 import { createBall } from './createBall'
 import { createPad } from './createPad'
-import { TweenMax } from 'gsap/gsap-core'
-import gsap, { Expo } from 'gsap'
+import gsap from 'gsap'
 
 console.log('Pong with PixiJS')
 
